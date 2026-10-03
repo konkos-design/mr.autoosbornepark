@@ -1,0 +1,649 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mr Auto Osborne Park</title>
+<meta name="description" content="Mr Auto Osborne Park — car servicing, brakes, diagnostics and pre-purchase inspections at 8/7 O'Malley St, Osborne Park WA. Mon–Fri 8am–5pm. Call 0406 311 604.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: workshop docket — dark steel ground, safety-yellow used only for action and live status; services as a parts grid, booking as a job card */
+:root{
+  --bg:#0f1216; --panel:#171b21; --panel-2:#1e232b; --line:#2b313a;
+  --fg:#eef1f4; --muted:#9aa3ae; --accent:#f5b800; --accent-ink:#141006; --accent-text:#f5b800;
+  --ok:#3ccf7a; --closed:#ff6b5a;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:10px; --wrap:1160px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f2f4f6; --panel:#ffffff; --panel-2:#e9edf1; --line:#d5dbe2;
+  --fg:#12161b; --muted:#56606b; --accent:#f5b800; --accent-ink:#141006; --accent-text:#8a6200;
+  --ok:#14864a; --closed:#c23a2b; color-scheme:light;
+}}
+:root[data-theme="light"]{
+  --bg:#f2f4f6; --panel:#ffffff; --panel-2:#e9edf1; --line:#d5dbe2;
+  --fg:#12161b; --muted:#56606b; --accent:#f5b800; --accent-ink:#141006; --accent-text:#8a6200;
+  --ok:#14864a; --closed:#c23a2b; color-scheme:light;
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--f-body);margin:0;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:800;line-height:.98;margin:0;text-wrap:balance;letter-spacing:.005em}
+h2{font-size:clamp(2.2rem,5vw,3.6rem);text-transform:uppercase}
+h3{font-size:1.45rem;text-transform:uppercase;letter-spacing:.02em}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:20px}
+.eyebrow{font:600 .78rem/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--accent)}
+.lead{color:var(--muted);font-size:1.08rem;max-width:60ch}
+section{padding-block:clamp(64px,9vw,112px)}
+.sec-head{display:grid;gap:16px;margin-bottom:44px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;font:700 1rem/1 var(--f-body);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .2s,background .2s,border-color .2s,color .2s}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{transform:translateY(-2px);background:#ffc824}
+.btn-ghost{border-color:var(--line);color:var(--fg);background:transparent}
+.btn-ghost:hover{border-color:var(--accent)}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-mark{width:38px;height:38px;border-radius:9px;background:var(--accent);display:grid;place-items:center;flex:none}
+.brand-mark svg{width:24px;height:24px}
+.brand-name{font:900 1.55rem/0.9 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.brand-name small{display:block;white-space:nowrap;font:600 .66rem/1.2 var(--f-mono);letter-spacing:.16em;color:var(--muted)}
+.nav{display:flex;gap:28px}
+.nav a{text-decoration:none;font-weight:600;font-size:.95rem;color:var(--muted);transition:color .2s}
+.nav a:hover{color:var(--fg)}
+.top-cta{display:flex;gap:10px;align-items:center}
+.top-cta .btn{min-height:44px;padding:0 18px;font-size:.92rem}
+.burger{display:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
+.burger svg{width:22px;height:22px}
+.mnav{display:none}
+@media (max-width:900px){
+  .nav,.top-cta .btn-ghost{display:none}
+  .burger{display:grid;place-items:center}
+  .mnav{display:grid;gap:4px;padding:8px 20px 20px;border-bottom:1px solid var(--line);background:var(--bg)}
+  .mnav a{padding:14px 4px;text-decoration:none;font:800 1.5rem/1 var(--f-display);text-transform:uppercase;border-bottom:1px solid var(--line)}
+}
+
+/* hero */
+.hero{padding-block:clamp(48px,7vw,96px) clamp(56px,8vw,104px);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;opacity:.35;mask-image:radial-gradient(ellipse at 70% 40%,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at 70% 40%,#000 0%,transparent 70%);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative}
+.hero-copy{display:grid;gap:26px;min-width:0}
+.status{display:inline-flex;align-items:center;gap:10px;font:600 .82rem/1 var(--f-mono);padding:9px 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);width:fit-content}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.status.open .dot{background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:pulse 2s infinite}
+.status.closed .dot{background:var(--closed)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+.hero h1{font-size:clamp(3.2rem,9vw,6.6rem);text-transform:uppercase;font-weight:900}
+.hero h1 em{font-style:normal;color:var(--accent-text);display:block}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.hero-facts{display:flex;flex-wrap:wrap;gap:10px 22px;font:500 .9rem/1.3 var(--f-mono);color:var(--muted)}
+.hero-facts span{display:flex;align-items:center;gap:8px}
+.hero-facts svg{width:16px;height:16px;color:var(--accent-text)}
+
+.gauge-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:28px 26px 24px;display:grid;gap:14px;box-shadow:0 30px 60px -30px rgba(0,0,0,.5)}
+.gauge-card svg{width:100%;height:auto;display:block;max-width:100%}
+.g-track{fill:none;stroke:var(--panel-2);stroke-width:14;stroke-linecap:round}
+.g-fill{fill:none;stroke:var(--accent);stroke-width:14;stroke-linecap:round;stroke-dasharray:314.16;stroke-dashoffset:314.16;animation:gfill 1.6s cubic-bezier(.2,.8,.2,1) .3s forwards}
+.g-tick{stroke:var(--muted);stroke-width:2}
+.g-tick.minor{stroke-width:1;opacity:.6}
+.g-lbl{fill:var(--muted);font:600 11px var(--f-mono);text-anchor:middle}
+.g-needle{transform-box:view-box;transform-origin:120px 130px;transform:rotate(-90deg);animation:gneedle 1.6s cubic-bezier(.2,.8,.2,1) .3s forwards}
+.g-needle line{stroke:var(--fg);stroke-width:3;stroke-linecap:round}
+.g-hub{fill:var(--accent)}
+.g-hub2{fill:var(--panel)}
+@keyframes gfill{to{stroke-dashoffset:18.85}}
+@keyframes gneedle{to{transform:rotate(79.2deg)}}
+.gauge-read{display:flex;justify-content:space-between;align-items:end;gap:12px;border-top:1px dashed var(--line);padding-top:14px}
+.gauge-read b{font:900 3rem/1 var(--f-display)}
+.gauge-read small{display:block;color:var(--muted);font:500 .8rem/1.3 var(--f-mono)}
+.stars{color:var(--accent);letter-spacing:2px;font-size:1.1rem}
+
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.gauge-card{max-width:440px}}
+
+/* strip */
+.strip{border-block:1px solid var(--line);background:var(--panel);padding-block:0}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.strip div{padding:22px 18px;display:grid;gap:4px;border-left:1px solid var(--line)}
+.strip div:first-child{border-left:0}
+.strip b{font:800 1.3rem/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.strip span{font:500 .8rem/1.4 var(--f-mono);color:var(--muted)}
+@media (max-width:760px){.strip .wrap{grid-template-columns:1fr 1fr}.strip div:nth-child(3){border-left:0}.strip div:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.svc{background:var(--panel);padding:28px 24px 24px;display:flex;flex-direction:column;gap:14px;min-width:0;position:relative;transition:background .25s}
+.svc:hover{background:var(--panel-2)}
+.svc-ico{width:48px;height:48px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;color:var(--accent-text);transition:background .25s,color .25s,border-color .25s}
+.svc:hover .svc-ico{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.svc-ico svg{width:24px;height:24px}
+.svc p{color:var(--muted);font-size:.95rem;flex:1}
+.svc button{all:unset;cursor:pointer;font:700 .9rem/1 var(--f-body);color:var(--accent-text);display:inline-flex;gap:8px;align-items:center;width:fit-content;padding:6px 0}
+.svc button span{transition:transform .2s}
+.svc button:hover span{transform:translateX(4px)}
+.svc button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@media (max-width:1000px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.svc-grid{grid-template-columns:1fr}}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.step{border-top:2px solid var(--line);padding-top:22px;display:grid;gap:10px;position:relative}
+.step::before{counter-increment:s;content:"0" counter(s);font:900 3.6rem/1 var(--f-display);color:var(--accent-text)}
+.step::after{content:"";position:absolute;top:-2px;left:0;width:56px;height:2px;background:var(--accent)}
+.step p{color:var(--muted)}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+
+/* why */
+.why .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.why-list{display:grid;gap:0;border-top:1px solid var(--line)}
+.why-item{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.why-item svg{width:28px;height:28px;color:var(--accent-text);margin-top:2px}
+.why-item h3{font-size:1.3rem;margin-bottom:6px}
+.why-item p{color:var(--muted)}
+@media (max-width:900px){.why .wrap{grid-template-columns:1fr;gap:32px}}
+
+/* reviews */
+.reviews{background:var(--panel);border-block:1px solid var(--line)}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.rev{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.rev blockquote{margin:0;font-size:1.04rem;line-height:1.55;flex:1}
+.rev footer{display:flex;align-items:center;gap:12px;font-weight:700}
+.rev .av{width:40px;height:40px;border-radius:50%;background:var(--panel-2);display:grid;place-items:center;font:800 1.1rem var(--f-display);color:var(--accent-text);flex:none}
+.rev small{display:block;font:500 .78rem var(--f-mono);color:var(--muted)}
+.rev-cta{margin-top:30px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.rev-score{display:flex;align-items:center;gap:14px}
+.rev-score b{font:900 3rem/1 var(--f-display)}
+.rev-score span{color:var(--muted);font:500 .85rem/1.4 var(--f-mono)}
+@media (max-width:900px){.rev-grid{grid-template-columns:1fr}}
+
+/* visit */
+.visit .wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;display:grid;gap:18px;align-content:start;min-width:0}
+.hours{width:100%;border-collapse:collapse;font:500 .95rem/1 var(--f-mono);font-variant-numeric:tabular-nums}
+.hours td{padding:12px 0;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right}
+.hours tr.today td{color:var(--accent-text);font-weight:600}
+.hours tr.today td:first-child::after{content:" · today";font-weight:400}
+.hours .shut{color:var(--muted)}
+.addr{font:800 1.9rem/1.05 var(--f-display);text-transform:uppercase}
+.map-art{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--panel-2);aspect-ratio:16/9;max-width:100%}
+.map-art svg{width:100%;height:100%;display:block}
+.m-road{stroke:var(--line);fill:none}
+.m-label{fill:var(--muted);font:600 10px var(--f-mono)}
+.pin{fill:var(--accent)}
+.pin-ring{fill:none;stroke:var(--accent);animation:ring 2.4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes ring{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(2.2)}}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.copyline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:600 1.05rem var(--f-mono)}
+.copy{all:unset;cursor:pointer;font:600 .78rem var(--f-mono);border:1px solid var(--line);padding:6px 10px;border-radius:8px;color:var(--muted)}
+.copy:hover{color:var(--fg);border-color:var(--accent)}
+.copy:focus-visible{outline:3px solid var(--accent)}
+@media (max-width:900px){.visit .wrap{grid-template-columns:1fr}}
+
+/* booking job card */
+.book .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
+.jobcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.jc-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 24px;background:var(--panel-2);border-bottom:1px dashed var(--line);font:600 .78rem/1.3 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.jc-head b{color:var(--fg)}
+form{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.f{display:grid;gap:7px;min-width:0}
+.f.full{grid-column:1/-1}
+label{font:600 .74rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+label i{font-style:normal;color:var(--accent-text)}
+input,select,textarea{width:100%;font:500 1rem/1.3 var(--f-body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:13px 14px;min-height:50px;transition:border-color .2s,box-shadow .2s}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.f.err input,.f.err select{border-color:var(--closed)}
+.f .msg{font:500 .8rem var(--f-body);color:var(--closed);min-height:0}
+.rego{text-transform:uppercase;font-family:var(--f-mono);letter-spacing:.12em}
+.form-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding-top:6px;border-top:1px dashed var(--line);margin-top:4px}
+.form-foot p{font-size:.85rem;color:var(--muted);max-width:42ch}
+.done{padding:28px 24px;display:grid;gap:16px}
+.done h3{font-size:1.8rem}
+.done pre{margin:0;white-space:pre-wrap;word-break:break-word;font:500 .88rem/1.55 var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px;max-height:280px;overflow:auto}
+.done p{color:var(--muted)}
+@media (max-width:900px){.book .wrap{grid-template-columns:1fr;gap:32px}}
+@media (max-width:560px){form{grid-template-columns:1fr;padding:20px}}
+
+/* footer */
+.foot{border-top:1px solid var(--line);padding-block:48px 110px}
+.foot .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+.foot h4{font:600 .74rem/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.foot a{text-decoration:none;color:var(--fg)}
+.foot a:hover{color:var(--accent-text)}
+.foot p{color:var(--muted);font-size:.92rem;max-width:40ch}
+.legal{grid-column:1/-1;border-top:1px solid var(--line);padding-top:20px;font:500 .78rem var(--f-mono);color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+@media (max-width:760px){.foot .wrap{grid-template-columns:1fr}}
+@media (min-width:901px){.foot{padding-bottom:48px}}
+
+/* mobile action bar */
+.mbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.mbar .btn{flex:1;min-height:50px}
+@media (max-width:900px){.mbar{display:flex}}
+@media (max-width:560px){.top-cta .btn-primary{display:none}}
+
+/* entrance */
+.rise{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.rise.d1{animation-delay:.08s}.rise.d2{animation-delay:.16s}.rise.d3{animation-delay:.24s}.rise.d4{animation-delay:.32s}
+@keyframes rise{from{transform:translateY(18px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}.g-needle{transform:rotate(79.2deg)}.g-fill{stroke-dashoffset:18.85}}
+</style>
+</head><body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></g></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></g></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></g></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></g></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.8 3.8z"/></symbol>
+    <symbol id="i-oil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></g></symbol>
+    <symbol id="i-brake" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l2 2 4-4"/><circle cx="12" cy="11" r="7"/><path d="M17 16l4 4"/></g></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2 12h4l3-8 4 16 3-8h6"/></symbol>
+    <symbol id="i-temp" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 14.8V4a2 2 0 0 0-4 0v10.8a4 4 0 1 0 4 0z"/><path d="M12 9v7"/></g></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></g></symbol>
+    <symbol id="i-susp" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3"/><path d="M8 5h8l-8 3.5h8l-8 3.5h8l-8 3.5h8l-8 3.5h8"/></g></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+    <symbol id="i-ear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5a4 4 0 0 1 8 0v1"/><path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 0 1-7 0"/><path d="M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4"/></g></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></g></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></g></symbol>
+    <symbol id="i-access" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M19 13v-2a7 7 0 0 0-5-6.7M10 4.3A7 7 0 0 0 5 11v2"/><path d="M12 7v6l4 4M12 13l-4 4"/></g></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="Mr Auto Osborne Park — home">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" style="color:#141006"><use href="#i-wrench"/></svg></span>
+      <span class="brand-name">Mr Auto<small>Osborne Park · WA</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#why">Why us</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Hours &amp; location</a>
+    </nav>
+    <div class="top-cta">
+      <a class="btn btn-ghost" href="tel:+61406311604"><svg><use href="#i-phone"/></svg>0406 311 604</a>
+      <a class="btn btn-primary" href="#book">Book a service</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="mnav" aria-label="Open menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+  <nav class="mnav" id="mnav" hidden aria-label="Mobile">
+    <a href="#services">Services</a>
+    <a href="#why">Why us</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#visit">Hours &amp; location</a>
+    <a href="#book">Book a service</a>
+  </nav>
+</header>
+
+<main id="home">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <div class="status rise" id="status" aria-live="polite"><span class="dot"></span><span id="statusText">Mon–Fri · 8:00 am – 5:00 pm</span></div>
+        <h1 class="rise d1">Car repairs in Osborne Park <em>done right.</em></h1>
+        <p class="lead rise d2">Servicing, brakes, diagnostics and pre-purchase inspections for all makes and models. Book by phone or send a request. We'll get back to you to confirm a time.</p>
+        <div class="hero-actions rise d3">
+          <a class="btn btn-primary" href="#book"><svg><use href="#i-cal"/></svg>Book a service</a>
+          <a class="btn btn-ghost" href="tel:+61406311604"><svg><use href="#i-phone"/></svg>Call 0406 311 604</a>
+        </div>
+        <div class="hero-facts rise d4">
+          <span><svg><use href="#i-pin"/></svg>8/7 O'Malley St, Osborne Park</span>
+          <span><svg><use href="#i-card"/></svg>Card &amp; mobile pay</span>
+        </div>
+      </div>
+
+      <div class="gauge-card rise d2" aria-label="Customer rating 4.7 out of 5">
+        <div class="eyebrow">Customer rating</div>
+        <svg viewBox="0 0 240 150" role="img" aria-label="Gauge showing 4.7 out of 5">
+          <path class="g-track" d="M20,130 A100,100 0 0 1 220,130"/>
+          <path class="g-fill" d="M20,130 A100,100 0 0 1 220,130"/>
+          <g id="ticks"></g>
+          <g class="g-needle"><line x1="120" y1="130" x2="120" y2="52"/></g>
+          <circle class="g-hub" cx="120" cy="130" r="9"/>
+          <circle class="g-hub2" cx="120" cy="130" r="3.5"/>
+        </svg>
+        <div class="gauge-read">
+          <div><b>4.7</b><small>out of 5</small></div>
+          <div style="text-align:right"><div class="stars" aria-hidden="true">★★★★★</div><small>from 50+ customer reviews</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="strip" aria-label="Key facts">
+    <div class="wrap">
+      <div><b>All makes</b><span>&amp; models</span></div>
+      <div><b>Mon–Fri</b><span>8:00 am – 5:00 pm</span></div>
+      <div><b>Pre-purchase</b><span>inspections</span></div>
+      <div><b>Accessible</b><span>wheelchair-friendly site</span></div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">What we do</div>
+        <h2>Workshop services</h2>
+        <p class="lead">Tell us what the car is doing and we'll find the cause. Pick a service to start a booking.</p>
+      </div>
+      <div class="svc-grid">
+        <article class="svc"><div class="svc-ico"><svg><use href="#i-oil"/></svg></div><h3>General servicing</h3><p>Oil and filter changes and scheduled servicing to keep your car running reliably.</p><button type="button" data-svc="General servicing">Book this <span>→</span></button></article>
+        <article class="svc"><div class="svc-ico"><svg><use href="#i-brake"/></svg></div><h3>Brakes</h3><p>Brake checks, pad and rotor replacement. Ask us if the pedal feels soft or you hear grinding.</p><button type="button" data-svc="Brakes">Book this <span>→</span></button></article>
+        <article class="svc"><div class="svc-ico"><svg><use href="#i-search"/></svg></div><h3>Pre-purchase inspection</h3><p>Buying a used car? We check it over before you hand over the money.</p><button type="button" data-svc="Pre-purchase inspection">Book this <span>→</span></button></article>
+        <article class="svc"><div class="svc-ico"><svg><use href="#i-pulse"/></svg></div><h3>Diagnostics</h3><p>Warning lights, knocks and rattles. We track down faults that are hard to find.</p><button type="button" data-svc="Diagnostics / noise">Book this <span>→</span></button></article>
+        <article class="svc"><div class="svc-ico"><svg><use href="#i-temp"/></svg></div><h3>Engine &amp; cooling</h3><p>Water pumps, belts and thermostats. Overheating sorted before it becomes engine damage.</p><button type="button" data-svc="Engine & cooling">Book this <span>→</span></button></article>
+        <article class="svc"><div class="svc-ico"><svg><use href="#i-gear"/></svg></div><h3>Transmission</h3><p>Transmission fluid services and checks for slipping or harsh gear changes.</p><button type="button" data-svc="Transmission">Book this <span>→</span></button></article>
+        <article class="svc"><div class="svc-ico"><svg><use href="#i-susp"/></svg></div><h3>Suspension &amp; steering</h3><p>Clunks over bumps, pulling to one side or uneven tyre wear.</p><button type="button" data-svc="Suspension & steering">Book this <span>→</span></button></article>
+        <article class="svc"><div class="svc-ico"><svg><use href="#i-bolt"/></svg></div><h3>Electrical &amp; air-con</h3><p>Electrical faults and air-conditioning checks, ready for a Perth summer.</p><button type="button" data-svc="Electrical / air-con">Book this <span>→</span></button></article>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0" aria-labelledby="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">How it works</div>
+        <h2 id="how">Booked in three steps</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Call or send a request</h3><p>Ring 0406 311 604 or fill in the booking form. Tell us the car and what it's doing.</p></div>
+        <div class="step"><h3>Drop the car off</h3><p>Bring it to Unit 8, 7 O'Malley St, Osborne Park on a weekday between 8 am and 5 pm.</p></div>
+        <div class="step"><h3>Collect and pay</h3><p>Pick up your car when it's ready. Pay by card or with your phone.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why" id="why" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head" style="margin:0">
+        <div class="eyebrow">Why Mr Auto</div>
+        <h2>A local workshop people come back to</h2>
+        <p class="lead">We're a small independent workshop in the Osborne Park industrial area. You talk directly to the mechanic working on your car.</p>
+      </div>
+      <div class="why-list">
+        <div class="why-item"><svg><use href="#i-ear"/></svg><div><h3>We find the real fault</h3><p>Customers come to us after other shops couldn't trace a noise. We take the time to diagnose properly.</p></div></div>
+        <div class="why-item"><svg><use href="#i-shield"/></svg><div><h3>Straight answers</h3><p>Pre-purchase inspections that tell you what you're really buying, explained in plain English.</p></div></div>
+        <div class="why-item"><svg><use href="#i-repeat"/></svg><div><h3>Regulars trust us</h3><p>Many of our customers bring every car they own back to us, service after service.</p></div></div>
+        <div class="why-item"><svg><use href="#i-access"/></svg><div><h3>Easy to deal with</h3><p>Weekday hours, a wheelchair-accessible site, and card or mobile payment.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews" id="reviews">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Reviews</div>
+        <h2>What customers say</h2>
+      </div>
+      <div class="rev-grid">
+        <figure class="rev" style="margin:0"><div class="stars" aria-label="5 stars">★★★★★</div><blockquote>“Took my car to multiple places for a knocking noise with no luck, but Mr Auto Osborne Park found and fixed a loose bolt in 30 minutes. Honest, fast, and highly recommended!”</blockquote><footer><span class="av" aria-hidden="true">L</span><span>LT Chedup<small>Diagnostics</small></span></footer></figure>
+        <figure class="rev" style="margin:0"><div class="stars" aria-label="5 stars">★★★★★</div><blockquote>“Had a really good experience while doing up my Vehicle Purchase Pre-Inspection. Goran was super professional and knowledgeable with his work.”</blockquote><footer><span class="av" aria-hidden="true">R</span><span>Ruban Raj<small>Pre-purchase inspection</small></span></footer></figure>
+        <figure class="rev" style="margin:0"><div class="stars" aria-label="5 stars">★★★★★</div><blockquote>“I've taken my VW Tiguan to Mr. Auto 3 times and each time my experience has been so great. The car always comes back running well.”</blockquote><footer><span class="av" aria-hidden="true">M</span><span>Matt<small>VW Tiguan owner</small></span></footer></figure>
+      </div>
+      <div class="rev-cta">
+        <div class="rev-score"><b>4.7</b><span>average rating<br>from 50+ reviews</span></div>
+        <a class="btn btn-ghost" href="https://maps.app.goo.gl/uWyw2LDKt8KnpNXm6" target="_blank" rel="noopener">Read all reviews on Google →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="visit" id="visit">
+    <div class="wrap">
+      <div class="card">
+        <div class="eyebrow">Find us</div>
+        <div class="addr">Unit 8, 7 O'Malley St<br>Osborne Park WA 6017</div>
+        <div class="map-art">
+          <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Simplified map showing the workshop on O'Malley Street">
+            <path class="m-road" stroke-width="14" d="M-10 120 H330"/>
+            <path class="m-road" stroke-width="8" d="M90 -10 V190 M230 -10 V190 M-10 40 H330"/>
+            <path class="m-road" stroke-width="3" d="M160 40 V120 M20 160 H300"/>
+            <text class="m-label" x="12" y="112">O'MALLEY ST</text>
+            <text class="m-label" x="240" y="30">OSBORNE PARK</text>
+            <circle class="pin-ring" cx="160" cy="88" r="16" stroke-width="2"/>
+            <path class="pin" d="M160 104c0 0-12-11-12-20a12 12 0 0 1 24 0c0 9-12 20-12 20z"/>
+            <circle cx="160" cy="84" r="4.5" fill="#141006"/>
+          </svg>
+        </div>
+        <div class="row">
+          <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=Mr%20Auto%20Osborne%20Park%2C%207%20O%27Malley%20St%2C%20Osborne%20Park%20WA%206017" target="_blank" rel="noopener"><svg><use href="#i-pin"/></svg>Get directions</a>
+          <a class="btn btn-ghost" href="https://maps.app.goo.gl/uWyw2LDKt8KnpNXm6" target="_blank" rel="noopener">Open in Google Maps</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Opening hours</div>
+        <table class="hours" id="hours" aria-label="Opening hours">
+          <tbody>
+            <tr data-d="1"><td>Monday</td><td>8:00 – 17:00</td></tr>
+            <tr data-d="2"><td>Tuesday</td><td>8:00 – 17:00</td></tr>
+            <tr data-d="3"><td>Wednesday</td><td>8:00 – 17:00</td></tr>
+            <tr data-d="4"><td>Thursday</td><td>8:00 – 17:00</td></tr>
+            <tr data-d="5"><td>Friday</td><td>8:00 – 17:00</td></tr>
+            <tr data-d="6"><td>Saturday</td><td class="shut">Closed</td></tr>
+            <tr data-d="0"><td>Sunday</td><td class="shut">Closed</td></tr>
+          </tbody>
+        </table>
+        <div class="eyebrow" style="margin-top:6px">Phone</div>
+        <div class="copyline"><a href="tel:+61406311604" style="text-decoration:none">0406 311 604</a><button class="copy" type="button" data-copy="0406 311 604">Copy</button></div>
+        <p style="color:var(--muted);font-size:.9rem">Bookings are recommended. Public holiday hours may differ, so call ahead.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="book" id="book" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head" style="margin:0">
+        <div class="eyebrow">Book a service</div>
+        <h2>Send us a booking request</h2>
+        <p class="lead">Fill in the job card and send it to us as a text message. We'll reply to confirm a time. Prefer to talk? Call <a href="tel:+61406311604">0406 311 604</a>.</p>
+      </div>
+
+      <div class="jobcard">
+        <div class="jc-head"><span>Job card</span><b id="jcDate"></b></div>
+        <form id="bookForm" novalidate>
+          <div class="f"><label for="fName">Your name <i>*</i></label><input id="fName" name="name" autocomplete="name" placeholder="Sam Taylor" required><span class="msg"></span></div>
+          <div class="f"><label for="fPhone">Mobile <i>*</i></label><input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="04xx xxx xxx" required><span class="msg"></span></div>
+          <div class="f"><label for="fCar">Make &amp; model <i>*</i></label><input id="fCar" name="car" placeholder="Toyota Corolla 2016" required><span class="msg"></span></div>
+          <div class="f"><label for="fRego">Rego</label><input id="fRego" name="rego" class="rego" placeholder="1ABC234" maxlength="8"><span class="msg"></span></div>
+          <div class="f"><label for="fSvc">Service <i>*</i></label>
+            <select id="fSvc" name="service" required>
+              <option value="">Choose a service…</option>
+              <option>General servicing</option><option>Brakes</option><option>Pre-purchase inspection</option><option>Diagnostics / noise</option><option>Engine &amp; cooling</option><option>Transmission</option><option>Suspension &amp; steering</option><option>Electrical / air-con</option><option>Something else</option>
+            </select><span class="msg"></span></div>
+          <div class="f"><label for="fDate">Preferred day</label><input id="fDate" name="date" type="date"><span class="msg"></span></div>
+          <div class="f full"><label for="fKm">Odometer (km)</label><input id="fKm" name="km" inputmode="numeric" placeholder="e.g. 128 000"><span class="msg"></span></div>
+          <div class="f full"><label for="fNotes">What's the car doing?</label><textarea id="fNotes" name="notes" placeholder="Squeal when braking, warning light on, due for a service…"></textarea></div>
+          <div class="form-foot">
+            <p>We only use your details to reply about this booking.</p>
+            <button class="btn btn-primary" type="submit">Prepare booking →</button>
+          </div>
+        </form>
+        <div class="done" id="done" hidden>
+          <h3>Your booking is ready to send</h3>
+          <p>Tap “Send as text” to open your messages app with everything filled in, then press send. If that doesn't open, copy the text or call us.</p>
+          <pre id="summary"></pre>
+          <div class="row">
+            <a class="btn btn-primary" id="smsLink" href="#">Send as text</a>
+            <button class="btn btn-ghost" type="button" id="copySummary">Copy text</button>
+            <a class="btn btn-ghost" href="tel:+61406311604"><svg><use href="#i-phone"/></svg>Call instead</a>
+          </div>
+          <button class="copy" type="button" id="editAgain" style="width:fit-content">← Edit details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#home"><span class="brand-mark"><svg viewBox="0 0 24 24" style="color:#141006"><use href="#i-wrench"/></svg></span><span class="brand-name">Mr Auto<small>Osborne Park · WA</small></span></a>
+      <p style="margin-top:16px">Independent car servicing and repairs for all makes and models in Osborne Park, Perth.</p>
+    </div>
+    <div>
+      <h4>Visit</h4>
+      <ul><li>Unit 8, 7 O'Malley St</li><li>Osborne Park WA 6017</li><li>Mon–Fri 8:00 – 17:00</li></ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul><li><a href="tel:+61406311604">0406 311 604</a></li><li><a href="#book">Book a service</a></li><li><a href="https://www.instagram.com/mr.autoosbornepark/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://maps.app.goo.gl/uWyw2LDKt8KnpNXm6" target="_blank" rel="noopener">Google Maps</a></li></ul>
+    </div>
+    <div class="legal"><span>© <span id="yr">2026</span> Mr Auto Osborne Park</span><span>Osborne Park · Perth · Western Australia</span></div>
+  </div>
+</footer>
+
+<div class="mbar">
+  <a class="btn btn-ghost" href="tel:+61406311604"><svg><use href="#i-phone"/></svg>Call</a>
+  <a class="btn btn-primary" href="#book"><svg><use href="#i-cal"/></svg>Book</a>
+</div>
+
+<script>
+(function(){
+  var PHONE = "+61406311604";
+  var $ = function(s,r){return (r||document).querySelector(s)};
+  var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+
+  // gauge ticks
+  var g = $("#ticks"), ns = "http://www.w3.org/2000/svg";
+  for (var v=0; v<=5; v+=0.5){
+    var a = (180 - v*36) * Math.PI/180, major = v%1===0;
+    var r1 = 84, r2 = major ? 74 : 79;
+    var l = document.createElementNS(ns,"line");
+    l.setAttribute("x1",120+r1*Math.cos(a)); l.setAttribute("y1",130-r1*Math.sin(a));
+    l.setAttribute("x2",120+r2*Math.cos(a)); l.setAttribute("y2",130-r2*Math.sin(a));
+    l.setAttribute("class","g-tick"+(major?"":" minor")); g.appendChild(l);
+    if (major){
+      var t = document.createElementNS(ns,"text");
+      t.setAttribute("x",120+62*Math.cos(a)); t.setAttribute("y",130-62*Math.sin(a)+4);
+      t.setAttribute("class","g-lbl"); t.textContent = v; g.appendChild(t);
+    }
+  }
+
+  // Perth time: open / closed
+  function perthNow(){
+    var p = new Intl.DateTimeFormat("en-AU",{timeZone:"Australia/Perth",weekday:"short",hour:"numeric",minute:"numeric",hour12:false}).formatToParts(new Date());
+    var o = {}; p.forEach(function(x){o[x.type]=x.value});
+    var days = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+    return {d:days[o.weekday], m:(parseInt(o.hour,10)%24)*60+parseInt(o.minute,10)};
+  }
+  function updateStatus(){
+    var n = perthNow(), el = $("#status"), tx = $("#statusText");
+    var weekday = n.d>=1 && n.d<=5, open = weekday && n.m>=480 && n.m<1020;
+    el.classList.toggle("open",open); el.classList.toggle("closed",!open);
+    if (open) tx.textContent = "Open now · closes 5:00 pm";
+    else if (weekday && n.m<480) tx.textContent = "Closed · opens today 8:00 am";
+    else if (n.d>=1 && n.d<=4) tx.textContent = "Closed · opens tomorrow 8:00 am";
+    else tx.textContent = "Closed · opens Monday 8:00 am";
+    $$("#hours tr").forEach(function(tr){tr.classList.toggle("today", +tr.dataset.d===n.d)});
+  }
+  updateStatus(); setInterval(updateStatus, 60000);
+
+  // job card date + year
+  try{
+    $("#jcDate").textContent = new Intl.DateTimeFormat("en-AU",{timeZone:"Australia/Perth",day:"2-digit",month:"short",year:"numeric"}).format(new Date());
+    $("#yr").textContent = new Date().getFullYear();
+  }catch(e){}
+
+  // mobile menu
+  var burger = $("#burger"), mnav = $("#mnav");
+  burger.addEventListener("click",function(){
+    var open = mnav.hidden; mnav.hidden = !open; burger.setAttribute("aria-expanded",String(open));
+  });
+  $$("#mnav a").forEach(function(a){a.addEventListener("click",function(){mnav.hidden=true;burger.setAttribute("aria-expanded","false")})});
+
+  // service buttons → prefill form
+  $$("[data-svc]").forEach(function(b){
+    b.addEventListener("click",function(){
+      $("#fSvc").value = b.dataset.svc;
+      $("#book").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto":"smooth"});
+      setTimeout(function(){ $("#fName").focus({preventScroll:true}) }, 500);
+    });
+  });
+
+  // copy helper
+  function copyText(text, btn){
+    var done = function(){ var o=btn.textContent; btn.textContent="Copied"; setTimeout(function(){btn.textContent=o},1600) };
+    try{
+      navigator.clipboard.writeText(text).then(done,function(){fallback()});
+    }catch(e){ fallback() }
+    function fallback(){
+      var ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); done() }catch(e){}
+      document.body.removeChild(ta);
+    }
+  }
+  $$("[data-copy]").forEach(function(b){ b.addEventListener("click",function(){ copyText(b.dataset.copy,b) }) });
+
+  // date field: min = today (Perth)
+  var dateIn = $("#fDate");
+  try{
+    var iso = new Intl.DateTimeFormat("en-CA",{timeZone:"Australia/Perth"}).format(new Date());
+    dateIn.min = iso;
+  }catch(e){}
+
+  // validation
+  var form = $("#bookForm");
+  function setErr(id,msg){ var f=$("#"+id).closest(".f"); f.classList.toggle("err",!!msg); f.querySelector(".msg").textContent = msg||"" }
+  function validate(){
+    var ok = true, v;
+    v = $("#fName").value.trim(); setErr("fName", v.length<2 ? "Please enter your name." : ""); ok = ok && v.length>=2;
+    v = $("#fPhone").value.replace(/[^\d+]/g,""); var pOk = /^(\+?61|0)[2-478]\d{8}$/.test(v);
+    setErr("fPhone", pOk ? "" : "Enter an Australian number, e.g. 0412 345 678."); ok = ok && pOk;
+    v = $("#fCar").value.trim(); setErr("fCar", v.length<2 ? "Tell us the make and model." : ""); ok = ok && v.length>=2;
+    v = $("#fSvc").value; setErr("fSvc", v ? "" : "Choose a service."); ok = ok && !!v;
+    v = dateIn.value; var dMsg = "";
+    if (v){
+      var d = new Date(v+"T12:00:00"), wd = d.getDay();
+      if (dateIn.min && v < dateIn.min) dMsg = "Pick today or a later date.";
+      else if (wd===0 || wd===6) dMsg = "We're closed on weekends. Pick Monday to Friday.";
+    }
+    setErr("fDate", dMsg); ok = ok && !dMsg;
+    v = $("#fKm").value.trim(); var kOk = !v || /^[\d\s,]{1,9}$/.test(v); setErr("fKm", kOk ? "" : "Numbers only, e.g. 128000."); ok = ok && kOk;
+    return ok;
+  }
+  $$("#bookForm input, #bookForm select").forEach(function(el){
+    el.addEventListener("blur",function(){ if (el.closest(".f").classList.contains("err")) validate() });
+  });
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    if (!validate()){ var first = $(".f.err input, .f.err select"); if (first) first.focus(); return; }
+    var dv = dateIn.value, dTxt = "Any weekday";
+    if (dv){ try{ dTxt = new Date(dv+"T12:00:00").toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long"}) }catch(e){ dTxt = dv } }
+    var rego = $("#fRego").value.trim().toUpperCase(), km = $("#fKm").value.trim(), notes = $("#fNotes").value.trim();
+    var lines = [
+      "Booking request – Mr Auto Osborne Park",
+      "Name: " + $("#fName").value.trim(),
+      "Mobile: " + $("#fPhone").value.trim(),
+      "Car: " + $("#fCar").value.trim() + (rego ? " (rego " + rego + ")" : ""),
+      km ? "Odometer: " + km + " km" : null,
+      "Service: " + $("#fSvc").value,
+      "Preferred day: " + dTxt,
+      notes ? "Notes: " + notes : null
+    ].filter(Boolean).join("\n");
+    $("#summary").textContent = lines;
+    $("#smsLink").href = "sms:" + PHONE + "?&body=" + encodeURIComponent(lines);
+    form.hidden = true; $("#done").hidden = false;
+    $("#done h3").focus && $("#done h3").setAttribute("tabindex","-1"); $("#done h3").focus();
+  });
+  $("#copySummary").addEventListener("click",function(){ copyText($("#summary").textContent, this) });
+  $("#editAgain").addEventListener("click",function(){ $("#done").hidden = true; form.hidden = false; $("#fName").focus() });
+})();
+</script>
+</body></html>
